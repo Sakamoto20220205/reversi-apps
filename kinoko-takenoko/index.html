@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="きのこ派とたけのこ派が戦うリバーシ。必殺技・特殊マス・テーマ曲付き。">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}
+.backlink{display:inline-block;font-size:13px;color:inherit;opacity:.7;text-decoration:none;margin-bottom:6px}.backlink:hover{opacity:1;text-decoration:underline}</style>
+<title>きのこたけのこ盤</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 盤を主役に、右側（狭幅では下）に戦況・必殺技・設定・総力戦を積む */
+:root{
+  --bg:#f3ece2; --surface:#fbf7f1; --ink:#2a1a10; --muted:#7a6656; --line:#e2d4c3;
+  --felt:#f0d8a6; --felt-2:#e3c287; --grid:#6b3f22; --frame:#4a2a17; --frame-2:#2b170b;
+  --accent:#c8553d; --warn:#c0392b; --hint:rgba(91,50,29,.32);
+  --kinoko:#d4513f; --takenoko:#4f9a55; --choco:#5b321d; --biscuit:#f8e4b6; --biscuit-hole:#c9954e;
+  --img-b:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDciIGZpbGw9IiNkNDUxM2YiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOWUyZjIyIiBzdHJva2Utd2lkdGg9IjMiLz4KPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2YyYTQ5MyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1kYXNoYXJyYXk9IjMgNCIvPgo8cmVjdCB4PSIzOSIgeT0iNDgiIHdpZHRoPSIyMiIgaGVpZ2h0PSIzOCIgcng9IjkiIGZpbGw9IiNlZmM5ODIiIHN0cm9rZT0iI2E5NzczYSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KPHBhdGggZD0iTTQ0IDU2djI0TTUwIDU2djI2TTU2IDU2djI0IiBzdHJva2U9IiNkNmE2NWUiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTE0IDU2QzE0IDMwIDMwIDE1IDUwIDE1Uzg2IDMwIDg2IDU2Qzg2IDYxIDgwIDYyIDcyIDYwQzYyIDU4IDM4IDU4IDI4IDYwQzIwIDYyIDE0IDYxIDE0IDU2WiIgZmlsbD0iIzViMzIxZCIgc3Ryb2tlPSIjMmUxNzBiIiBzdHJva2Utd2lkdGg9IjIuNSIvPgo8cGF0aCBkPSJNMjQgNDJDMjggMzAgMzggMjMgNDggMjIiIHN0cm9rZT0iIzlhNjY0NCIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiLz4KPC9zdmc+); --img-w:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDciIGZpbGw9IiM0ZjlhNTUiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmM2YTM1IiBzdHJva2Utd2lkdGg9IjMiLz4KPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2E3ZDhhMyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1kYXNoYXJyYXk9IjMgNCIvPgo8cGF0aCBkPSJNMjQgNjZDMjQgODAgMzYgODcgNTAgODdTNzYgODAgNzYgNjZaIiBmaWxsPSIjZWZjOTgyIiBzdHJva2U9IiNhOTc3M2EiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik0zMiA3NGgzNk0zNiA4MGgyOCIgc3Ryb2tlPSIjZDZhNjVlIiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik0yMiA2N0MyNiA0NiAzOCAyNCA1MCAxMUM2MiAyNCA3NCA0NiA3OCA2N0M2NiA3MSAzNCA3MSAyMiA2N1oiIGZpbGw9IiM1YjMyMWQiIHN0cm9rZT0iIzJlMTcwYiIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTI4IDU4QzQwIDUyIDYwIDUyIDcyIDU4TTMzIDQ2QzQzIDQxIDU3IDQxIDY3IDQ2TTM5IDM0QzQ2IDMwIDU0IDMwIDYxIDM0TTQ0IDIzQzQ4IDIxIDUyIDIxIDU2IDIzIiBzdHJva2U9IiMzNDFiMGQiIHN0cm9rZS13aWR0aD0iMi4yIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTM2IDUyQzM4IDQwIDQzIDMwIDQ4IDIyIiBzdHJva2U9IiM5YTY2NDQiIHN0cm9rZS13aWR0aD0iMy41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiLz4KPC9zdmc+);
+  --font-display:"Mochiy Pop One","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  --font-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17110d; --surface:#211813; --ink:#f1e6da; --muted:#b19c88; --line:#3a2b20;
+  --felt:#d9b77a; --felt-2:#c9a263; --grid:#3f2414; --frame:#3b2112; --frame-2:#1f1007;
+  --accent:#e57a5f; --warn:#ef6b5a; --hint:rgba(60,30,12,.38); --biscuit:#ead09a; --biscuit-hole:#a8763a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17110d; --surface:#211813; --ink:#f1e6da; --muted:#b19c88; --line:#3a2b20;
+  --felt:#d9b77a; --felt-2:#c9a263; --grid:#3f2414; --frame:#3b2112; --frame-2:#1f1007;
+  --accent:#e57a5f; --warn:#ef6b5a; --hint:rgba(60,30,12,.38); --biscuit:#ead09a; --biscuit-hole:#a8763a; color-scheme:dark}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:grid;gap:18px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-family:var(--font-display);font-weight:400;font-size:clamp(24px,5vw,38px);margin:0;letter-spacing:.04em;text-wrap:balance}
+h1 .t{white-space:nowrap}
+h1 .vs{font-size:.5em;color:var(--accent);margin:0 .35em;vertical-align:.25em}
+h1 small{font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--muted);letter-spacing:.06em;margin-left:10px}
+@media (max-width:520px){h1 small{display:block;margin:4px 0 0}}
+.status{font-weight:700;font-size:15px;min-height:1.6em}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:1fr}}
+
+/* board */
+.boardbox{min-width:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.say{width:min(100%,600px);min-height:2.9em;display:flex;align-items:center;gap:10px;font-size:14px}
+.say .who{flex:none;font-weight:700;font-size:12px;color:#fff;padding:3px 10px;border-radius:999px}
+.say .who.k{background:var(--kinoko)} .say .who.t{background:var(--takenoko)}
+.say .line{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 12px;min-width:0}
+.say[data-empty]{visibility:hidden}
+.frame{width:min(100%,600px);background:linear-gradient(160deg,var(--frame),var(--frame-2));border-radius:10px;padding:clamp(18px,4%,28px);box-shadow:0 10px 30px rgba(0,0,0,.25);position:relative;--n:8}
+.coords{position:absolute;font-family:var(--font-mono);font-size:11px;color:#e8d5b5;opacity:.85;display:grid;pointer-events:none}
+.coords.top{left:clamp(18px,4%,28px);right:clamp(18px,4%,28px);top:0;height:clamp(18px,4%,28px);grid-template-columns:repeat(var(--n),1fr);place-items:center}
+.coords.left{top:clamp(18px,4%,28px);bottom:clamp(18px,4%,28px);left:0;width:clamp(18px,4%,28px);grid-template-rows:repeat(var(--n),1fr);place-items:center}
+.board{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));grid-template-rows:repeat(var(--n),minmax(0,1fr));aspect-ratio:1;width:100%;max-width:100%;background:var(--grid);gap:2px;padding:2px;border-radius:3px;position:relative;container-type:inline-size}
+.cell{appearance:none;border:0;padding:0;margin:0;background:radial-gradient(circle at 50% 40%,var(--felt),var(--felt-2));position:relative;cursor:default;display:block;min-width:0;min-height:0;overflow:hidden;font-size:0;color:inherit}
+.cell.legal,.cell.tgt{cursor:pointer}
+.cell.tgt{box-shadow:inset 0 0 0 3px var(--accent)}
+.cell.tgt:hover{background:radial-gradient(circle,rgba(255,255,255,.35),transparent 70%),radial-gradient(circle at 50% 40%,var(--felt),var(--felt-2))}
+.cell:focus-visible{outline:3px solid var(--accent);outline-offset:-3px;z-index:1}
+.cell.sp-biscuit{background:radial-gradient(circle,var(--biscuit-hole) 0 9%,transparent 11%) 0 0/33.3% 33.3%,var(--biscuit)}
+.cell.sp-melt{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M0 0h40v9c-3 0-3 7-6 7s-2-11-6-11-2 17-6 17-3-12-6-12-2 8-5 8-3-5-5-5-3 3-6 3z' fill='%235b321d'/%3E%3C/svg%3E") top/100% auto no-repeat,radial-gradient(circle at 50% 40%,var(--felt),var(--felt-2))}
+.cell.sp-box{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='10' y='17' width='20' height='15' rx='2' fill='%23c8553d'/%3E%3Crect x='8' y='13' width='24' height='6' rx='2' fill='%23e06b52'/%3E%3Crect x='18' y='13' width='4' height='19' fill='%23f6e0a8'/%3E%3Cpath d='M20 13c-4-6-9-5-8-2s8 2 8 2zm0 0c4-6 9-5 8-2s-8 2-8 2z' fill='none' stroke='%23f6e0a8' stroke-width='2'/%3E%3C/svg%3E") center/62% no-repeat,radial-gradient(circle at 50% 40%,var(--felt),var(--felt-2))}
+.cell .disc,.cell .dot,.last::after{position:absolute;inset:0;margin:auto}
+.cell .disc{width:88%;height:88%}
+.cell.guarded{box-shadow:inset 0 0 0 3px var(--kinoko)}
+.dot{width:24%;height:24%;border-radius:50%;background:var(--hint);transition:transform .15s}
+.cell.legal:hover .dot{transform:scale(1.5)}
+.disc{width:82%;aspect-ratio:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+.disc.b{background:var(--img-b) center/contain no-repeat}
+.disc.w{background:var(--img-w) center/contain no-repeat}
+.disc.flip{animation:flip .38s ease}
+.disc.place{animation:place .22s ease-out}
+.disc.melt{animation:flip .7s ease}
+@keyframes flip{0%{transform:scaleX(1)}50%{transform:scaleX(.05)}100%{transform:scaleX(1)}}
+@keyframes place{0%{transform:scale(.4);opacity:.3}100%{transform:scale(1);opacity:1}}
+.last::after{content:"";width:14%;height:14%;z-index:1;border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px #fff}
+.badge{position:absolute;right:3%;bottom:3%;z-index:2;min-width:36%;height:36%;border-radius:999px;display:grid;place-items:center;color:#fff;font-family:var(--font-mono);font-size:calc(100cqw / var(--n) * .24);line-height:1;padding:0 4%;box-shadow:0 0 0 1.5px #fff}
+.badge.g{background:var(--kinoko)} .badge.m{background:var(--choco)}
+.star{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--grid);transform:translate(-50%,-50%);pointer-events:none;z-index:1}
+@media (prefers-reduced-motion:reduce){.disc.flip,.disc.place,.disc.melt{animation:none}}
+.toast{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(30,16,8,.9);color:#fbf1e3;padding:12px 20px;border-radius:8px;font-weight:700;text-align:center;pointer-events:none;z-index:5;max-width:85%;width:max-content;font-size:14px;line-height:1.5}
+.toast.big{font-family:var(--font-display);font-weight:400;font-size:clamp(20px,5vw,30px);background:var(--accent);color:#fff;padding:14px 26px;animation:pop .35s ease-out}
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(.6)}70%{transform:translate(-50%,-50%) scale(1.08)}100%{transform:translate(-50%,-50%) scale(1)}}
+.banner{position:absolute;inset:0;display:grid;place-items:center;z-index:6;background:rgba(20,10,5,.45);border-radius:10px;cursor:pointer;border:0;padding:0;width:100%;font:inherit}
+.banner .flag{display:grid;gap:4px;justify-items:center;color:#fff;padding:20px 34px 26px;clip-path:polygon(0 0,100% 0,100% 100%,50% 86%,0 100%);min-width:58%}
+.banner .flag.k{background:var(--kinoko)} .banner .flag.t{background:var(--takenoko)} .banner .flag.d{background:var(--choco)}
+.banner .big{font-family:var(--font-display);font-size:clamp(22px,6vw,36px)}
+.banner .sub{font-size:13px;opacity:.9}
+.banner .img{width:64px;height:64px}
+
+/* side */
+aside{display:grid;gap:14px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;gap:12px}
+.label{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:700}
+.note{font-size:12px;color:var(--muted);margin:0}
+.score{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.side{display:flex;align-items:center;gap:8px;padding:10px 8px;border-radius:6px;border:2px solid transparent;transition:border-color .2s;min-width:0}
+.side.turn{border-color:var(--accent)}
+.side .disc{width:38px;flex:none}
+.side>div:last-child{min-width:0}
+.side .n{font-family:var(--font-display);font-size:28px;font-variant-numeric:tabular-nums;line-height:1}
+.side .who{font-size:11px;color:var(--muted);line-height:1.35}
+.bar{height:6px;border-radius:3px;background:var(--takenoko);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--kinoko);transition:width .3s}
+.skillrow{display:grid;gap:8px}
+.skillrow .owned{display:flex;gap:8px;flex-wrap:wrap;font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;color:#fff}
+.chip.k{background:var(--kinoko)} .chip.t{background:var(--takenoko)} .chip.off{opacity:.4}
+.skillhelp{font-size:13px;color:var(--ink);margin:0}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button,.btn{font:inherit;font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px;border-radius:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg button:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.btn.skill-k{background:var(--kinoko);border-color:var(--kinoko);color:#fff;font-weight:700}
+.btn.skill-t{background:var(--takenoko);border-color:var(--takenoko);color:#fff;font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.toggle{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5}
+.toggle input{margin-top:3px}
+.toggle small{display:block;color:var(--muted);font-size:12px}
+.legend{display:grid;gap:8px;font-size:12.5px;margin:0;padding:0;list-style:none}
+.legend li{display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:center}
+.legend .sw{width:26px;height:26px;border-radius:3px}
+.log{font-size:12.5px;display:grid;grid-template-columns:2.4em auto 1fr;gap:2px 8px;max-height:170px;overflow:auto;font-variant-numeric:tabular-nums;align-items:center}
+.log .num{color:var(--muted);font-family:var(--font-mono)}
+.log .mv{font-family:var(--font-mono)}
+.log .s{width:9px;height:9px;border-radius:50%}
+.log .s.k{background:var(--kinoko)} .log .s.t{background:var(--takenoko)}
+.log .empty{grid-column:1/-1;color:var(--muted)}
+.war{display:grid;gap:8px}
+.war .nums{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.war .num{font-family:var(--font-display);font-size:24px;font-variant-numeric:tabular-nums}
+.war .k{color:var(--kinoko)} .war .t{color:var(--takenoko)}
+.war .bar{height:10px;border-radius:5px}
+.timer{display:grid;gap:6px}
+.timer[hidden]{display:none!important}
+.timer .t{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--muted)}
+.timer .sec{font-family:var(--font-mono);font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums}
+.timer .track{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.timer .track i{display:block;height:100%;width:100%;background:var(--accent);transition:width .1s linear}
+.timer.warn .sec{color:var(--warn)}
+.timer.warn .track i{background:var(--warn)}
+@media (prefers-reduced-motion:no-preference){.timer.warn .sec{animation:pulse .5s ease-in-out infinite alternate}}
+@keyframes pulse{to{opacity:.45}}
+.result{font-family:var(--font-display);font-size:20px;font-weight:400}
+details.panel{display:block}
+/* top page */
+.home{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:20px;align-items:start}
+.home .hero{grid-column:1;display:grid;gap:14px;background:linear-gradient(160deg,var(--frame),var(--frame-2));color:#f6e9d8;border-radius:12px;padding:24px}
+.home .hero .note{color:#d9c3a6}
+.home .hcol{display:grid;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.home .hplay{grid-column:1}
+.home .hrules{grid-column:2;grid-row:1/span 2}
+@media (max-width:860px){.home{grid-template-columns:1fr}.home .hero,.home .hplay,.home .hrules{grid-column:1;grid-row:auto}}
+.home h2{font-family:var(--font-display);font-weight:400;font-size:18px;margin:0;letter-spacing:.04em}
+.heroStones{display:flex;align-items:center;justify-content:center;gap:18px;padding-block:6px}
+.heroStones .disc{width:min(28vw,120px)}
+.heroStones .vs{font-family:var(--font-display);font-size:26px;color:#f2a493}
+.lead{margin:0;font-size:15px;line-height:1.7;text-wrap:pretty}
+.btn.big{font-size:17px;padding:12px 20px;border-radius:8px}
+.home .war .bar{background:var(--takenoko)}
+.home .war .k{color:#f2a493} .home .war .t{color:#a7d8a3}
+.ctlgroup{display:grid;gap:12px}
+.ctl{display:grid;gap:6px}
+.ctl.dim{opacity:.45}
+.rcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.rcard{font:inherit;color:var(--ink);text-align:left;display:grid;grid-template-columns:38px minmax(0,1fr);gap:4px 10px;align-items:start;padding:12px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);cursor:pointer;position:relative}
+.rcard:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.rcard .sw{width:38px;height:38px;border-radius:6px;grid-row:span 2}
+.rcard .sw.sk{border-radius:50%;background:linear-gradient(90deg,var(--kinoko) 50%,var(--takenoko) 50%)}
+.rcard .rt{display:grid;gap:2px;font-size:12.5px;color:var(--muted);line-height:1.5}
+.rcard .rt b{font-size:14px;color:var(--ink)}
+.rcard .state{grid-column:2;justify-self:start;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.rcard[aria-pressed="true"]{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 1px var(--accent) inset}
+.rcard[aria-pressed="true"] .state{background:var(--accent);border-color:var(--accent);color:#fff}
+.rcard:disabled{cursor:not-allowed;opacity:.55}
+aside .rcards{grid-template-columns:1fr}
+.dbody{display:grid;gap:12px;margin-top:14px}
+details.panel summary{cursor:pointer;font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:700;list-style:none}
+details.panel summary::after{content:"＋";float:right}
+details.panel[open] summary::after{content:"−"}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="/">← アプリ一覧に戻る</a>
+  <header>
+    <h1><span class="t">きのこ<span class="vs">vs</span>たけのこ</span><small id="sub">8×8・きのこ派が先手</small></h1>
+    <div class="status" id="status" aria-live="polite"></div>
+  </header>
+  <section class="home" id="home">
+    <div class="hero">
+      <div class="heroStones"><div class="disc b"></div><span class="vs">vs</span><div class="disc w"></div></div>
+      <p class="lead">きのこ派とたけのこ派、盤の上で決着をつけよう。追加ルールを選んでから対局を始めます。</p>
+      <p class="note" id="ruleSummary"></p>
+      <button class="btn primary big" id="startBtn">対局を始める</button>
+      <div class="war warBody"><p class="note">集計を読み込んでいます…</p></div>
+    </div>
+    <div class="hcol hplay"><h2>対局の設定</h2><div class="ctlgroup" id="homePlay"></div></div>
+    <div class="hcol hrules"><h2>追加ルール</h2><p class="note">カードをタップすると、ルールを追加したり外したりできます。</p><div class="ctlgroup" id="homeRules"></div><h2>演出と総力戦</h2><div class="ctlgroup" id="homeFx"></div></div>
+  </section>
+  <div class="main" id="game" hidden>
+    <div class="boardbox">
+      <div class="say" id="say" data-empty><span class="who k" id="sayWho">きのこ派</span><span class="line" id="sayLine">…</span></div>
+      <div class="frame" id="frame">
+        <div class="coords top" id="ctop"></div>
+        <div class="coords left" id="cleft"></div>
+        <div class="board" id="board" role="grid" aria-label="きのこたけのこ盤の盤面"></div>
+        <div class="toast" id="toast" hidden></div>
+        <button class="banner" id="banner" hidden aria-label="結果を閉じる"></button>
+      </div>
+    </div>
+    <aside>
+      <section class="panel">
+        <div class="score">
+          <div class="side" id="sideB"><div class="disc b"></div><div><div class="n" id="nB">2</div><div class="who" id="whoB">きのこ派</div></div></div>
+          <div class="side" id="sideW"><div class="disc w"></div><div><div class="n" id="nW">2</div><div class="who" id="whoW">たけのこ派</div></div></div>
+        </div>
+        <div class="bar" aria-hidden="true"><i id="barB" style="width:50%"></i></div>
+        <div class="timer" id="timer" hidden>
+          <div class="t"><span id="timerWho">きのこ派の持ち時間</span><span><span class="sec" id="timerSec">30</span> 秒</span></div>
+          <div class="track" aria-hidden="true"><i id="timerBar"></i></div>
+        </div>
+        <div class="skillrow" id="skillrow" hidden>
+          <div class="owned" id="skillOwned"></div>
+          <p class="skillhelp" id="skillHelp"></p>
+          <div class="row" id="skillBtns"></div>
+        </div>
+        <div class="row">
+          <button class="btn primary" id="newBtn">新しく始める</button>
+          <button class="btn" id="homeBtn">トップに戻る</button>
+          <button class="btn" id="musicBtn" aria-pressed="true">音楽を止める</button>
+          <button class="btn" id="undoBtn">待った</button>
+        </div>
+      </section>
+
+      <section class="panel" id="legendPanel" hidden>
+        <div class="label">この対局のルール</div>
+        <ul class="legend" id="legend"></ul>
+      </section>
+
+      <section class="panel" id="warPanel">
+        <div class="label">派閥総力戦</div>
+        <div class="war warBody"><p class="note">集計を読み込んでいます…</p></div>
+      </section>
+
+      <details class="panel" id="setPlay" open>
+        <summary>対局設定</summary><div class="dbody" id="setPlayBody"></div>
+      </details>
+      <details class="panel" id="setRule" open>
+        <summary>追加ルールと演出</summary><div class="dbody" id="setRuleBody"></div>
+      </details>
+
+      <section class="panel">
+        <div class="label">棋譜</div>
+        <div class="log" id="log"></div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+(()=>{
+/*ENGINE*/
+const B=1,W=2,COLS="abcdefghij";
+const DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+const NAME={1:"きのこ派",2:"たけのこ派"};
+const SKILL={1:"かさガード",2:"にょきっと成長"};
+const GUARD_PLIES=10, MELT_PLIES=6;
+let settings={mode:"cpuB",lv:2,hints:true,limit:0,size:8,rBiscuit:true,rMelt:true,rBox:true,spAmount:1,skills:true,skillCount:1,fx:true,war:true,music:true};
+function specialTypes(){return [settings.rMelt&&"melt",settings.rBiscuit&&"biscuit",settings.rBox&&settings.skills&&"box"].filter(Boolean)}
+let S=null,N=8,WT=[],CTX={spec:{},guard:{}};
+
+function weights(n){const w=[];for(let r=0;r<n;r++)for(let c=0;c<n;c++){
+  const er=r===0||r===n-1,ec=c===0||c===n-1,nr=r===1||r===n-2,nc=c===1||c===n-2;let v=2;
+  if(er&&ec)v=120;else if((er&&nc)||(nr&&ec))v=-20;else if(nr&&nc)v=-40;else if(er||ec)v=12;else if(nr||nc)v=-4;w.push(v)}return w}
+function isCorner(i){const r=(i/N)|0,c=i%N;return (r===0||r===N-1)&&(c===0||c===N-1)}
+function syncCtx(){CTX={spec:S.spec,guard:S.guard}}
+function isLocked(i){return CTX.spec[i]==="biscuit"||CTX.guard[i]>0}
+function flipsFor(b,i,p){
+  if(b[i])return [];
+  const o=3-p,r=(i/N)|0,c=i%N,res=[];
+  for(const [dr,dc] of DIRS){
+    let rr=r+dr,cc=c+dc,ok=true;const line=[];
+    while(rr>=0&&rr<N&&cc>=0&&cc<N&&b[rr*N+cc]===o){const j=rr*N+cc;if(isLocked(j)){ok=false;break}line.push(j);rr+=dr;cc+=dc}
+    if(ok&&line.length&&rr>=0&&rr<N&&cc>=0&&cc<N&&b[rr*N+cc]===p)res.push(...line);
+  }
+  return res;
+}
+function legal(b,p){const m=[];for(let i=0;i<b.length;i++)if(!b[i]&&flipsFor(b,i,p).length)m.push(i);return m}
+function count(b){let x=0,y=0;for(const v of b){if(v===B)x++;else if(v===W)y++}return [x,y]}
+function name(i){return COLS[i%N]+(((i/N)|0)+1)}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function genSpecials(){
+  const types=shuffle(specialTypes());
+  if(!types.length)return {};
+  const n=settings.spAmount===2?Math.round(N*N/10):Math.round(N*N/21);
+  const h=N/2,cand=[];
+  for(let i=0;i<N*N;i++){const r=(i/N)|0,c=i%N;if(isCorner(i))continue;if(r>=h-1&&r<=h&&c>=h-1&&c<=h)continue;cand.push(i)}
+  shuffle(cand);
+  const spec={};for(let k=0;k<n;k++)spec[cand[k]]=types[k%types.length];
+  return spec;
+}
+function initial(){
+  N=settings.size;WT=weights(N);
+  const b=new Array(N*N).fill(0),h=N/2;
+  b[(h-1)*N+h-1]=W;b[(h-1)*N+h]=B;b[h*N+h-1]=B;b[h*N+h]=W;
+  const sk=settings.skills?settings.skillCount:0;
+  return {N,board:b,turn:B,last:-1,log:[],over:false,winner:null,spec:genSpecials(),melt:{},guard:{},skills:{1:sk,2:sk},ply:0,gid:Math.random().toString(36).slice(2)};
+}
+function evaluate(b,p){
+  const o=3-p;let s=0,e=0;
+  for(let i=0;i<b.length;i++){const v=b[i];if(!v){e++;continue}
+    let w=WT[i];const sp=CTX.spec[i];if(sp==="biscuit")w+=45;if(CTX.guard[i]>0)w+=8;if(S&&S.melt[i])w-=30;
+    s+=v===p?w:-w}
+  const mp=legal(b,p).length,mo=legal(b,o).length;
+  s+=(mp-mo)*(e>b.length/3?8:4);
+  if(e<12){const [x,y]=count(b);s+=(p===B?x-y:y-x)*3}
+  return s;
+}
+function apply(b,i,p){const nb=b.slice(),f=flipsFor(b,i,p);nb[i]=p;for(const j of f)nb[j]=p;return nb}
+function negamax(b,p,depth,alpha,beta,exact){
+  const moves=legal(b,p);
+  if(depth===0&&!exact)return evaluate(b,p);
+  if(!moves.length){
+    if(!legal(b,3-p).length){const [x,y]=count(b);return (p===B?x-y:y-x)*1000}
+    return -negamax(b,3-p,depth,-beta,-alpha,exact);
+  }
+  moves.sort((a,c)=>WT[c]-WT[a]);
+  let best=-Infinity;
+  for(const m of moves){
+    const v=-negamax(apply(b,m,p),3-p,Math.max(0,depth-1),-beta,-alpha,exact);
+    if(v>best)best=v;if(v>alpha)alpha=v;if(alpha>=beta)break;
+  }
+  return best;
+}
+function cpuMove(b,p,lv){
+  const moves=legal(b,p);if(!moves.length)return -1;
+  if(lv===1){
+    const sc=moves.map(m=>({m,s:WT[m]+flipsFor(b,m,p).length*2+(CTX.spec[m]==="biscuit"?40:0)-(CTX.spec[m]==="melt"?30:0)+Math.random()*60}));
+    sc.sort((a,c)=>c.s-a.s);return sc[0].m;
+  }
+  const empties=b.filter(v=>!v).length;
+  const exact=lv===3&&empties<=(N>=10?8:10);
+  const depth=lv===2?2:(N>=10?4:5);
+  let best=moves[0],bv=-Infinity;
+  for(const m of moves.slice().sort((a,c)=>WT[c]-WT[a])){
+    let v=-negamax(apply(b,m,p),3-p,depth-1,-Infinity,-bv,exact)+(lv===2?Math.random()*6:0);
+    if(CTX.spec[m]==="box"&&settings.skills)v+=25;
+    if(v>bv){bv=v;best=m}
+  }
+  return best;
+}
+function guardArea(i,p){const r=(i/N)|0,c=i%N,res=[];
+  for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){const rr=r+dr,cc=c+dc;if(rr<0||rr>=N||cc<0||cc>=N)continue;const j=rr*N+cc;if(S.board[j]===p)res.push(j)}return res}
+function canNyoki(p){return settings.skills&&p===W&&S.skills[W]>0&&S.board.some((v,i)=>!v&&!isCorner(i))}
+function canGuard(p){return settings.skills&&p===B&&S.skills[B]>0}
+function canAct(p){return legal(S.board,p).length>0||canNyoki(p)}
+/* CPU: かさガードの使いどころ（相手に狙われている自石が多い場所） */
+function pickGuard(lv){
+  const empties=S.board.filter(v=>!v).length;
+  if(empties>S.board.length*0.72)return -1;
+  const threat={};
+  for(const m of legal(S.board,W))for(const j of flipsFor(S.board,m,W))threat[j]=(threat[j]||0)+Math.max(6,WT[j]+26);
+  let best=-1,bv=0;
+  for(let i=0;i<S.board.length;i++){if(S.board[i]!==B)continue;let v=0;for(const j of guardArea(i,B))if(!S.guard[j])v+=threat[j]||0;if(v>bv){bv=v;best=i}}
+  if(lv===1)return Math.random()<.25&&bv>0?best:-1;
+  const th=empties<S.board.length*0.3?25:90;
+  return bv>=th?best:-1;
+}
+/* CPU: にょきっと成長の使いどころ（置ける場所がない時、または普通の手より明らかに得な時） */
+function pickNyoki(lv,moves){
+  const cand=[];S.board.forEach((v,i)=>{if(!v&&!isCorner(i))cand.push(i)});
+  if(!cand.length)return -1;
+  let nb=-1,nv=-Infinity;
+  for(const i of cand){const v=evaluate(apply(S.board,i,W),W);if(v>nv){nv=v;nb=i}}
+  if(!moves.length)return nb;
+  if(lv===1)return Math.random()<.08?nb:-1;
+  let mv=-Infinity;for(const m of moves){const v=evaluate(apply(S.board,m,W),W);if(v>mv)mv=v}
+  const empties=cand.length;
+  return nv-mv>=(empties>S.board.length*0.5?70:35)?nb:-1;
+}
+/*/ENGINE*/
+
+const $=id=>document.getElementById(id);
+const boardEl=$("board");
+try{const s=JSON.parse(localStorage.getItem("kinotake-settings-v3")||"null");if(s)settings={...settings,...s}}catch(e){}
+function saveSettings(){try{localStorage.setItem("kinotake-settings-v3",JSON.stringify(settings))}catch(e){}}
+
+let history=[],busy=false,cpuTimer=null,target=null,builtN=0;
+function isCpu(p){return (settings.mode==="cpuB"&&p===W)||(settings.mode==="cpuW"&&p===B)}
+const cls=p=>p===B?"k":"t";
+
+/* セリフ（演出がオンの時だけ） */
+const LINES={
+ 1:{corner:["角はいただいた。かさの下は安全だ","この角、きのこ派の領土とする"],big:["見よ、この寝返りの数を！","みんな、かさの下においで"],skill:["かさを広げろ！ここは通さない","雨にも負けず、たけのこにも負けず"],win:["チョコの面積が違うのだよ","やはり時代はきのこ派だ"],melt:["チョコが溶けた…だが想定内だ"]},
+ 2:{corner:["角の土台はクッキーで固めた","地下からじわじわ、角まで来たよ"],big:["サクサクッと寝返りだ！","みんな、たけのこ畑へようこそ"],skill:["にょきっ！ここに生えてきたよ","竹は一晩でここまで伸びる"],win:["サクサク感の勝利だね","やっぱりたけのこ派が正義"],melt:["あっ、溶けちゃった"]}
+};
+let sayT;
+function react(p,kind){
+  if(!settings.fx)return;
+  const say=$("say");
+  if(!p){$("sayWho").className="who k";$("sayWho").textContent="両派";$("sayLine").textContent="…今日のところは引き分けにしておこう";}
+  else{const L=LINES[p][kind];if(!L)return;$("sayWho").className="who "+cls(p);$("sayWho").textContent=NAME[p];$("sayLine").textContent=L[Math.floor(Math.random()*L.length)]}
+  say.removeAttribute("data-empty");clearTimeout(sayT);
+  if(kind!=="win")sayT=setTimeout(()=>say.setAttribute("data-empty",""),3200);
+}
+let toastT;
+function toast(msg,big){const t=$("toast");t.textContent=msg;t.className="toast"+(big?" big":"");t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,big?1300:1800)}
+
+function buildBoard(){
+  boardEl.innerHTML="";
+  $("frame").style.setProperty("--n",N);
+  for(let i=0;i<N*N;i++){
+    const c=document.createElement("button");
+    c.className="cell";c.id="c"+i;c.setAttribute("role","gridcell");
+    c.addEventListener("click",()=>cellClick(i));
+    boardEl.appendChild(c);
+  }
+  if(N===8)for(const [x,y] of [[2,2],[6,2],[2,6],[6,6]]){const s=document.createElement("div");s.className="star";s.style.left=(x/N*100)+"%";s.style.top=(y/N*100)+"%";boardEl.appendChild(s)}
+  $("ctop").innerHTML=[...COLS.slice(0,N)].map(c=>`<span>${c}</span>`).join("");
+  $("cleft").innerHTML=Array.from({length:N},(_,k)=>`<span>${k+1}</span>`).join("");
+  $("sub").textContent=`${N}×${N}・きのこ派が先手`;
+  builtN=N;
+}
+function onlyNyoki(){return !S.over&&!legal(S.board,S.turn).length&&canNyoki(S.turn)}
+function render(ev={}){
+  syncCtx();
+  if(builtN!==N)buildBoard();
+  const b=S.board,human=!S.over&&!isCpu(S.turn)&&!busy;
+  const moves=S.over?[]:legal(b,S.turn);
+  for(let i=0;i<b.length;i++){
+    const c=$("c"+i),v=b[i];
+    const isLegal=human&&!target&&moves.includes(i);
+    const isTgt=human&&((target==="guard"&&v===S.turn)||(target==="nyoki"&&!v&&!isCorner(i)));
+    const sp=S.spec[i];
+    c.className="cell"+(sp?" sp-"+sp:"")+(isLegal?" legal":"")+(isTgt?" tgt":"")+(i===S.last?" last":"")+(S.guard[i]?" guarded":"");
+    c.disabled=!(isLegal||isTgt);
+    const spName={biscuit:"ビスケット床",melt:"チョコ溶けマス",box:"おやつ箱"}[sp];
+    c.setAttribute("aria-label",name(i)+(v?`（${NAME[v]}）`:"")+(spName?`・${spName}`:"")+(isLegal?"・置ける":isTgt?"・選べる":""));
+    let html="";
+    if(v){
+      const anim=i===ev.placed?" place":(ev.melted||[]).includes(i)?" melt":(ev.flipped||[]).includes(i)?" flip":"";
+      html=`<div class="disc ${v===B?"b":"w"}${anim}"></div>`;
+      if(S.guard[i])html+=`<span class="badge g" title="かさガード残りターン">${Math.ceil(S.guard[i]/2)}</span>`;
+      else if(S.melt[i])html+=`<span class="badge m" title="溶けるまでの残りターン">${Math.ceil(S.melt[i]/2)}</span>`;
+    }else if(isLegal&&settings.hints)html=`<div class="dot"></div>`;
+    c.innerHTML=html;
+  }
+  const [x,y]=count(b);
+  $("nB").textContent=x;$("nW").textContent=y;
+  $("barB").style.width=(x/(x+y)*100)+"%";
+  $("sideB").classList.toggle("turn",!S.over&&S.turn===B);
+  $("sideW").classList.toggle("turn",!S.over&&S.turn===W);
+  $("whoB").innerHTML="きのこ派"+(settings.mode==="pvp"?"":settings.mode==="cpuB"?"<br>あなた":"<br>CPU");
+  $("whoW").innerHTML="たけのこ派"+(settings.mode==="pvp"?"":settings.mode==="cpuW"?"<br>あなた":"<br>CPU");
+  let st;
+  if(S.over){
+    st=S.winner?`${NAME[S.winner]}の勝利（${Math.max(x,y)}対${Math.min(x,y)}）`:`和平成立（引き分け ${x}対${y}）`;
+    if(settings.mode!=="pvp"&&S.winner){const me=settings.mode==="cpuB"?B:W;st+=S.winner===me?" あなたの勝ちです":" CPUの勝ちです"}
+    $("status").innerHTML=`<span class="result"></span>`;$("status").firstChild.textContent=st;
+  }else{
+    st=isCpu(S.turn)?`${NAME[S.turn]}（CPU）が考えています…`:target==="guard"?"かさを広げる自分の石を選んでください":target==="nyoki"?"石を生やす空きマスを選んでください（角以外）":onlyNyoki()?`${NAME[S.turn]}は置ける場所がありません`:`${NAME[S.turn]}の番です`;
+    $("status").textContent=st;
+  }
+  renderSkills();renderLegend();renderLog();
+  if(!S.over)Music.sync();
+  $("undoBtn").disabled=!history.length||busy;
+}
+function renderSkills(){
+  const row=$("skillrow");
+  if(!settings.skills){row.hidden=true;return}
+  row.hidden=false;
+  $("skillOwned").innerHTML=`<span class="chip k${S.skills[B]?"":" off"}">かさガード ×${S.skills[B]}</span><span class="chip t${S.skills[W]?"":" off"}">にょきっと成長 ×${S.skills[W]}</span>`;
+  const btns=$("skillBtns"),help=$("skillHelp");btns.innerHTML="";help.textContent="";
+  if(S.over||isCpu(S.turn)||busy){help.hidden=true;return}
+  help.hidden=false;
+  const p=S.turn;
+  if(target){
+    help.textContent=target==="guard"?"選んだ石とまわり1マスの自分の石が、5ターンのあいだ裏返らなくなります。":"角以外の好きな空きマスに置けます。挟める石があれば裏返します。";
+    const c=document.createElement("button");c.className="btn";c.id="cancelSkill";c.textContent="やめる";c.onclick=()=>{target=null;render()};btns.appendChild(c);return;
+  }
+  if(p===B&&canGuard(B)){const k=document.createElement("button");k.className="btn skill-k";k.id="useGuard";k.textContent="かさガードを使う";k.onclick=()=>{target="guard";render()};btns.appendChild(k);help.textContent="使っても手番は続きます。"}
+  if(p===W&&canNyoki(W)){const k=document.createElement("button");k.className="btn skill-t";k.id="useNyoki";k.textContent="にょきっと成長を使う";k.onclick=()=>{target="nyoki";render()};btns.appendChild(k);help.textContent="この手番の代わりに使います。"}
+  if(onlyNyoki()){const q=document.createElement("button");q.className="btn";q.id="passBtn";q.textContent="パスする";q.onclick=humanPass;btns.appendChild(q);help.textContent="置ける場所がないので、パスするか、にょきっと成長を使えます。"}
+  if(!btns.children.length)help.hidden=true;
+}
+function renderLegend(){
+  const items=[];
+  const hasSp=Object.values(S.spec);const used=t=>hasSp.includes(t);
+  if(used("biscuit"))items.push(["sp-biscuit","ビスケット床","ここに置いた石は二度と裏返りません。"]);
+  if(used("melt"))items.push(["sp-melt","チョコ溶けマス","ここに置いた石は3ターン後に相手の色に変わります。"]);
+  if(used("box"))items.push(["sp-box","おやつ箱","置くと自分の派閥の必殺技がもう1回使えます。"]);
+  if(settings.skills){items.push(["","かさガード（きのこ派）","自分の石1つとまわり1マスの自分の石を、5ターン裏返らなくする。手番は続く。"]);
+    items.push(["","にょきっと成長（たけのこ派）","角以外の好きな空きマスに置ける。挟めれば裏返す。手番を使う。"])}
+  $("legendPanel").hidden=!items.length;
+  $("legend").innerHTML=items.map(([c,t,d])=>`<li><span class="sw cell ${c}" style="${c?"":"background:"+(t.includes("きのこ派")?"var(--kinoko)":"var(--takenoko)")+";border-radius:50%"}"></span><span><b>${t}</b><br>${d}</span></li>`).join("");
+}
+function renderLog(){
+  const L=S.log;
+  if(!L.length){$("log").innerHTML=`<div class="empty">まだ手がありません。きのこ派から攻めます。</div>`;return}
+  $("log").innerHTML=L.map((e,k)=>`<span class="num">${k+1}.</span><span class="s ${cls(e.p)}" title="${NAME[e.p]}"></span><span class="mv">${e.t}</span>`).join("");
+  $("log").scrollTop=1e6;
+}
+
+/* 対局の進行 */
+function snapshot(){history.push(JSON.parse(JSON.stringify(S)))}
+function place(i,p,flips,kind){
+  S.board[i]=p;for(const j of flips)S.board[j]=p;S.last=i;
+  const sp=S.spec[i],ev={p,placed:i,flipped:flips,corner:isCorner(i),big:flips.length>=5};
+  if(sp==="melt"){S.melt[i]=MELT_PLIES;delete S.spec[i];ev.note="チョコ溶けマス：3ターン後にこの石は相手の色に変わります"}
+  else if(sp==="box"){delete S.spec[i];if(settings.skills){S.skills[p]++;ev.note=`おやつ箱：${SKILL[p]}がもう1回使えます`}}
+  S.log.push({p,t:name(i)+(kind==="nyoki"?" にょき":"")+(sp==="melt"?" 溶":sp==="box"?" 箱":sp==="biscuit"?" 床":"")});
+  return ev;
+}
+function doMove(i){const f=flipsFor(S.board,i,S.turn);if(!f.length)return;stopTimer();snapshot();endPly(place(i,S.turn,f,"move"))}
+function doNyoki(i){if(S.board[i]||isCorner(i))return;stopTimer();snapshot();const p=S.turn;S.skills[p]--;const ev=place(i,p,flipsFor(S.board,i,p),"nyoki");ev.skill=true;target=null;endPly(ev)}
+function doGuard(i){
+  if(S.board[i]!==S.turn)return;snapshot();const p=S.turn;S.skills[p]--;
+  for(const j of guardArea(i,p))S.guard[j]=GUARD_PLIES;
+  S.log.push({p,t:"かさ "+name(i)});target=null;render();react(p,"skill");toast("かさガード！",!!settings.fx);
+}
+function endPly(ev){
+  S.ply++;
+  for(const k in S.guard){if(--S.guard[k]<=0)delete S.guard[k]}
+  ev.melted=[];
+  for(const k in S.melt){if(--S.melt[k]<=0){delete S.melt[k];const i=+k;if(S.board[i]){S.board[i]=3-S.board[i];ev.melted.push(i)}}}
+  S.turn=3-S.turn;resolve(ev);
+}
+function resolve(ev){
+  syncCtx();let passMsg=null;
+  if(!canAct(S.turn)){
+    if(!canAct(3-S.turn)){finish(ev);return}
+    S.log.push({p:S.turn,t:"パス"});passMsg=`${NAME[S.turn]}は置ける場所がないのでパスです`;S.turn=3-S.turn;
+  }
+  render(ev);
+  if(passMsg)toast(passMsg);
+  else if(ev.note)toast(ev.note);
+  else if(ev.melted&&ev.melted.length)toast(`チョコが溶けて ${ev.melted.map(name).join("・")} が寝返りました`);
+  else if(ev.big&&settings.fx)toast(`大量寝返り！ ${ev.flipped.length}枚`,true);
+  if(settings.fx){
+    if(ev.skill)react(ev.p,"skill");
+    else if(ev.melted&&ev.melted.length)react(3-S.board[ev.melted[0]],"melt");
+    else if(ev.big)react(ev.p,"big");
+    else if(ev.corner)react(ev.p,"corner");
+  }
+  armTimer();scheduleCpu();
+}
+function humanPass(){
+  if(S.over||isCpu(S.turn))return;stopTimer();snapshot();target=null;
+  S.log.push({p:S.turn,t:"パス"});
+  if(!legal(S.board,3-S.turn).length){finish({});return}
+  S.turn=3-S.turn;render();armTimer();scheduleCpu();
+}
+function finish(ev){
+  S.over=true;const [x,y]=count(S.board);S.winner=x>y?B:y>x?W:0;target=null;
+  render(ev);stopTimer();armTimer();Music.fanfare(S.winner);
+  if(settings.fx){showBanner();react(S.winner,"win")}
+  recordWar();
+}
+function showBanner(){
+  const [x,y]=count(S.board),w=S.winner,bn=$("banner");
+  bn.innerHTML=`<div class="flag ${w?cls(w):"d"}">${w?`<div class="img disc ${w===B?"b":"w"}"></div>`:""}<div class="big">${w?NAME[w]+"の勝利！":"和平成立"}</div><div class="sub">${x} 対 ${y}　（タップで閉じる）</div></div>`;
+  bn.hidden=false;
+}
+$("banner").addEventListener("click",()=>$("banner").hidden=true);
+function cellClick(i){
+  if(busy||S.over||isCpu(S.turn))return;
+  if(target==="guard")return doGuard(i);
+  if(target==="nyoki")return doNyoki(i);
+  doMove(i);
+}
+function scheduleCpu(){
+  clearTimeout(cpuTimer);
+  if(S.over||!isCpu(S.turn))return;
+  busy=true;render();
+  cpuTimer=setTimeout(cpuAct,settings.lv===3?300:550);
+}
+function cpuAct(){
+  syncCtx();const p=S.turn,lv=settings.lv,moves=legal(S.board,p);
+  if(settings.skills&&S.skills[p]>0){
+    if(p===W){const n=pickNyoki(lv,moves);if(n>=0){busy=false;doNyoki(n);return}}
+    else if(moves.length){const g=pickGuard(lv);if(g>=0){busy=false;doGuard(g);busy=true;render();cpuTimer=setTimeout(()=>{busy=false;syncCtx();const m=cpuMove(S.board,p,lv);if(m>=0)doMove(m)},700);return}}
+  }
+  busy=false;
+  const m=cpuMove(S.board,p,lv);
+  if(m>=0)doMove(m);
+}
+
+/* 1手の制限時間（人の手番のみ） */
+let tInt=null,tDeadline=0;
+function stopTimer(){clearInterval(tInt);tInt=null}
+function armTimer(){
+  stopTimer();const el=$("timer"),lim=settings.limit;
+  if(!lim||S.over){el.hidden=true;return}
+  el.hidden=false;
+  if(isCpu(S.turn)){$("timerWho").textContent=`${NAME[S.turn]}（CPU）の手番`;$("timerSec").textContent="–";$("timerBar").style.width="100%";el.classList.remove("warn");return}
+  $("timerWho").textContent=`${NAME[S.turn]}の持ち時間`;
+  tDeadline=performance.now()+lim*1000;
+  const tick=()=>{const left=Math.max(0,tDeadline-performance.now());
+    $("timerSec").textContent=Math.ceil(left/1000);$("timerBar").style.width=(left/(lim*1000)*100)+"%";
+    el.classList.toggle("warn",left<=5000);if(left<=0){stopTimer();timeUp()}};
+  tick();tInt=setInterval(tick,100);
+}
+function timeUp(){
+  if(S.over||isCpu(S.turn))return;target=null;
+  const moves=legal(S.board,S.turn),who=NAME[S.turn];
+  if(!moves.length){humanPass();toast(`${who}は時間切れでパスしました`);return}
+  const m=moves[Math.floor(Math.random()*moves.length)];doMove(m);
+  toast(`${who}は時間切れ：${name(m)}に自動で打ちました`);
+}
+
+function newGame(){clearTimeout(cpuTimer);busy=false;target=null;showGame();$("banner").hidden=true;$("say").setAttribute("data-empty","");S=initial();history=[];render();$("sub").textContent=`${N}×${N}・きのこ派が先手`;armTimer();scheduleCpu()}
+function undo(){
+  if(busy||!history.length)return;clearTimeout(cpuTimer);target=null;$("banner").hidden=true;
+  let prev=history.pop();
+  while(isCpu(prev.turn)&&history.length)prev=history.pop();
+  S=prev;N=S.N;WT=weights(N);render();armTimer();
+  if(isCpu(S.turn))scheduleCpu();
+}
+
+/* 派閥総力戦（共有の集計。サインインしている人のみ参加） */
+let warDb=null,myId=null,myTally={kinoko:0,takenoko:0,draw:0},warTotals=null,warState="loading";
+const sentGames=new Set();let writing=Promise.resolve();
+function renderWar(){document.querySelectorAll(".warBody").forEach(renderWarInto)}
+function renderWarInto(body){
+  if(warState==="loading"){body.innerHTML=`<p class="note">集計を読み込んでいます…</p>`;return}
+  if(warState==="off"){body.innerHTML=`<p class="note">このページでは総力戦の集計を表示できません。claude.ai にサインインしている人だけが参加できます。</p>`;return}
+  const t=warTotals||{kinoko:0,takenoko:0,draw:0},sum=t.kinoko+t.takenoko;
+  const pct=sum?t.kinoko/sum*100:50;
+  const mine=myTally.kinoko+myTally.takenoko+myTally.draw;
+  body.innerHTML=`<div class="nums"><span class="k">きのこ派 <span class="num">${t.kinoko}</span> 勝</span><span class="t">たけのこ派 <span class="num">${t.takenoko}</span> 勝</span></div>
+  <div class="bar"><i style="width:${pct}%"></i></div>
+  <p class="note">引き分け ${t.draw} 局・参加 ${t.people} 人${myId?`・あなたが送った結果 ${mine} 局`:""}${settings.war?"":"（あなたの結果は送らない設定です）"}${sum===0?"。まだ集計がありません。対局を終えると最初の1勝が記録されます。":""}</p>`;
+}
+function hideWar(){
+  document.querySelectorAll(".warBody").forEach(el=>{const p=el.closest(".panel");(p||el).hidden=true});
+  document.querySelectorAll('input[data-key="war"]').forEach(i=>{const l=i.closest("label");if(l)l.hidden=true});
+}
+async function initWar(){
+  if(!window.claude||typeof window.claude.use!=="function"){warState="off";hideWar();return}
+  try{
+    const [db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
+    if(!db){warState="off";renderWar();return}
+    warDb=db;myId=user?await user.id():null;warState="on";renderWar();
+    db.collection("tally").onSnapshot(snap=>{
+      const t={kinoko:0,takenoko:0,draw:0,people:0};
+      for(const d of snap.docs){const v=d.data()||{};const k=+v.kinoko||0,w=+v.takenoko||0,dr=+v.draw||0;t.kinoko+=k;t.takenoko+=w;t.draw+=dr;if(k+w+dr)t.people++;
+        if(d.id===myId)myTally={kinoko:k,takenoko:w,draw:dr}}
+      warTotals=t;renderWar();
+    },()=>{warState="off";renderWar()});
+  }catch(e){warState="off";renderWar()}
+}
+function recordWar(){
+  if(!settings.war||!warDb||!myId||!S.over||sentGames.has(S.gid))return;
+  sentGames.add(S.gid);
+  const key=S.winner===B?"kinoko":S.winner===W?"takenoko":"draw";
+  writing=writing.then(async()=>{
+    const next={...myTally};next[key]=(next[key]||0)+1;myTally=next;
+    try{await warDb.doc("tally/"+myId).set({...next,at:Date.now()})}catch(e){toast("総力戦に結果を送れませんでした")}
+    renderWar();
+  });
+}
+
+
+/* BGM：オリジナルの2曲を Web Audio で合成。手番が変わると半小節の区切りで切り替える */
+const THEMES={
+ k:{bpm:116,mel:[77,0,81,84,81,0,77,0, 79,81,82,0,81,0,79,0, 76,0,79,84,82,81,79,0, 77,0,72,0,77,0,0,0],
+    roots:[41,46,48,41],chords:[[65,69,72],[65,70,74],[64,67,72],[65,69,72]],voice:"marimba",drum:"soft"},
+ t:{bpm:132,mel:[74,76,79,0,76,74,71,0, 74,0,74,76,79,0,81,0, 83,81,79,76,74,0,76,0, 79,0,74,0,79,0,0,0],
+    roots:[43,48,50,43],chords:[[67,71,74],[67,72,76],[66,69,74],[67,71,74]],voice:"pluck",drum:"crisp"}
+};
+const Music={ctx:null,out:null,noise:null,timer:null,theme:null,pending:null,step:0,next:0,
+  ensure(){
+    if(!this.ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+      try{this.ctx=new AC()}catch(e){return false}
+      this.out=this.ctx.createGain();this.out.gain.value=.16;this.out.connect(this.ctx.destination);
+      const len=this.ctx.sampleRate*.2,buf=this.ctx.createBuffer(1,len,this.ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;this.noise=buf}
+    if(this.ctx.state==="suspended")this.ctx.resume().catch(()=>{});
+    return true;
+  },
+  sync(){
+    updateMusicBtn();
+    if(!settings.music||$("game").hidden||!S||S.over){this.stop();return}
+    this.play(S.turn===B?"k":"t");
+  },
+  play(th){
+    if(!this.ensure())return;
+    this.pending=th;
+    if(!this.timer){this.theme=th;this.step=0;this.next=this.ctx.currentTime+.06;this.timer=setInterval(()=>this.tick(),25)}
+  },
+  stop(){clearInterval(this.timer);this.timer=null;this.theme=null},
+  preview(){this.ensure()},
+  tick(){
+    const c=this.ctx;
+    while(this.next<c.currentTime+.12){
+      if(this.pending&&this.pending!==this.theme&&this.step%4===0){this.theme=this.pending;this.step=(this.step-this.step%8)%32}
+      const T=THEMES[this.theme],t=this.next,i=this.step,bar=(i/8)|0,pos=i%8,e=60/T.bpm/2;
+      const m=T.mel[i];if(m)this.voice(T.voice,t,m,e);
+      if(pos===0||pos===4)this.bass(t,T.roots[bar]+(pos===4?7:0),e*1.6);
+      if(pos===2||pos===6)for(const n of T.chords[bar])this.tone(t,n,e*.9,T.voice==="pluck"?"square":"triangle",.045,T.voice==="pluck"?1800:2600);
+      if(T.drum==="soft"){if(pos===0||pos===4)this.kick(t,.5);if(pos%2===1)this.hat(t,.05,.05)}
+      else{if(pos===0||pos===4)this.kick(t,.55);if(pos%2===1)this.hat(t,.11,.035);if(pos===4)this.hat(t,.14,.09)}
+      this.next+=e;this.step=(i+1)%32;
+    }
+  },
+  tone(t,midi,dur,type,gain,cut){
+    const c=this.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=440*Math.pow(2,(midi-69)/12);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(gain,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    if(cut){const f=c.createBiquadFilter();f.type="lowpass";f.frequency.value=cut;o.connect(f);f.connect(g)}else o.connect(g);
+    g.connect(this.out);o.start(t);o.stop(t+dur+.03);
+  },
+  voice(kind,t,m,e){
+    if(kind==="marimba"){this.tone(t,m,.42,"sine",.32);this.tone(t,m+24,.12,"sine",.06)}
+    else{this.tone(t,m,e*.85,"square",.12,2600);this.tone(t,m+12,e*.5,"triangle",.08)}
+  },
+  bass(t,m,dur){this.tone(t,m,dur,"triangle",.32)},
+  kick(t,gain){const c=this.ctx,o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(42,t+.12);
+    g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+.16);o.connect(g);g.connect(this.out);o.start(t);o.stop(t+.18)},
+  hat(t,gain,dur){const c=this.ctx,s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=this.noise;f.type="highpass";f.frequency.value=7000;
+    g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(f);f.connect(g);g.connect(this.out);s.start(t);s.stop(t+dur+.01)},
+  fanfare(w){
+    if(!settings.music||!this.ensure())return;this.stop();
+    const c=this.ctx,t=c.currentTime+.08;
+    const seq=w===B?[65,69,72,77,0,81,77]:w===W?[67,71,74,79,0,83,79]:[67,72,0,67];
+    const kind=w===W?"pluck":"marimba",e=.13;
+    seq.forEach((m,k)=>{if(m)this.voice(kind,t+k*e,m,e*1.4)});
+    const end=t+seq.length*e;(w===W?[67,71,74,79]:[65,69,72,77]).forEach(n=>this.tone(end,n,1.2,"triangle",.07));this.kick(end,.6);
+  }
+};
+function updateMusicBtn(){const b=$("musicBtn");if(!b)return;b.textContent=settings.music?"音楽を止める":"音楽を流す";b.setAttribute("aria-pressed",String(settings.music))}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)Music.stop();else Music.sync()});
+
+/* 設定（トップページと対局中の設定パネルで共通） */
+const PLAY=[
+ {key:"mode",label:"対戦モード",opts:[["cpuB","CPU戦（あなたがきのこ派）"],["cpuW","CPU戦（あなたがたけのこ派）"],["pvp","2人で対戦"]]},
+ {key:"lv",label:"CPUの強さ",opts:[[1,"やさしい"],[2,"ふつう"],[3,"つよい"]],dim:()=>settings.mode==="pvp"},
+ {key:"limit",label:"1手の制限時間",opts:[[0,"なし"],[10,"10秒"],[20,"20秒"],[30,"30秒"],[60,"60秒"]]},
+ {key:"size",label:"盤の大きさ",opts:[[6,"6×6"],[8,"8×8"],[10,"10×10"]]},
+];
+const CARDS=[
+ {key:"skills",title:"派閥の必殺技",desc:"きのこ派「かさガード」、たけのこ派「にょきっと成長」が使えます。",sw:"sk"},
+ {key:"rBiscuit",title:"ビスケット床",desc:"ここに置いた石は二度と裏返りません。",sw:"cell sp-biscuit"},
+ {key:"rMelt",title:"チョコ溶けマス",desc:"ここに置いた石は3ターン後に相手の色に変わります。",sw:"cell sp-melt"},
+ {key:"rBox",title:"おやつ箱",desc:"置くと自分の派閥の必殺技がもう1回使えます。",sw:"cell sp-box",needs:"skills"},
+];
+const SUB=[
+ {key:"skillCount",label:"必殺技の回数",opts:[[1,"1回ずつ"],[2,"2回ずつ"]],dis:()=>!settings.skills},
+ {key:"spAmount",label:"特殊マスの数",opts:[[1,"少なめ"],[2,"多め"]],dis:()=>!specialTypes().length},
+];
+const CHECK_HINT=[{key:"hints",label:"置ける場所を表示"}];
+const CHECK_FX=[{key:"music",label:"BGM",sub:"手番ごとに、きのこ派とたけのこ派のテーマ曲に切り替わります"},{key:"fx",label:"演出",sub:"セリフ、大量寝返り、勝利の旗"},{key:"war",label:"総力戦に結果を送る",sub:"終わった対局の勝敗を派閥の集計に加えます"}];
+const RESTART=["mode","size","skills","skillCount","rBiscuit","rMelt","rBox","spAmount"];
+const RULE_NAMES={skills:"必殺技",rBiscuit:"ビスケット床",rMelt:"チョコ溶けマス",rBox:"おやつ箱"};
+
+const segHTML=(sc,c)=>`<div class="ctl" data-ctl="${c.key}"><div class="label">${c.label}</div><div class="seg">${c.opts.map(([v,t])=>`<button type="button" id="${sc}-${c.key}-${v}" data-key="${c.key}" data-val="${v}" aria-pressed="false">${t}</button>`).join("")}</div></div>`;
+const cardHTML=(sc,c)=>`<button type="button" class="rcard" id="${sc}-${c.key}" data-key="${c.key}" data-toggle="1" aria-pressed="false"><span class="sw ${c.sw}"></span><span class="rt"><b>${c.title}</b><span>${c.desc}</span></span><span class="state"></span></button>`;
+const checkHTML=(sc,c)=>`<label class="toggle"><input type="checkbox" id="${sc}-${c.key}" data-key="${c.key}" data-check="1"><span>${c.label}${c.sub?`<small>${c.sub}</small>`:""}</span></label>`;
+function buildControls(){
+  $("homePlay").innerHTML=PLAY.map(c=>segHTML("h",c)).join("")+CHECK_HINT.map(c=>checkHTML("h",c)).join("");
+  $("homeRules").innerHTML=`<div class="rcards">${CARDS.map(c=>cardHTML("h",c)).join("")}</div>`+SUB.map(c=>segHTML("h",c)).join("");
+  $("homeFx").innerHTML=CHECK_FX.map(c=>checkHTML("h",c)).join("");
+  $("setPlayBody").innerHTML=PLAY.map(c=>segHTML("s",c)).join("")+CHECK_HINT.map(c=>checkHTML("s",c)).join("");
+  $("setRuleBody").innerHTML=`<div class="rcards">${CARDS.map(c=>cardHTML("s",c)).join("")}</div>`+SUB.map(c=>segHTML("s",c)).join("")+CHECK_FX.map(c=>checkHTML("s",c)).join("")+`<p class="note">対戦モード・盤の大きさ・追加ルールを変えると、新しい対局になります。</p>`;
+  for(const id of ["homePlay","homeRules","homeFx","setPlayBody","setRuleBody"]){
+    const el=$(id);
+    el.addEventListener("click",e=>{
+      const b=e.target.closest("button[data-key]");if(!b||b.disabled)return;
+      if(b.dataset.toggle)setSetting(b.dataset.key,!settings[b.dataset.key]);
+      else setSetting(b.dataset.key,b.dataset.val);
+    });
+    el.addEventListener("change",e=>{const t=e.target;if(t.dataset&&t.dataset.check)setSetting(t.dataset.key,t.checked)});
+  }
+}
+function syncControls(){
+  document.querySelectorAll("button[data-val]").forEach(b=>b.setAttribute("aria-pressed",String(settings[b.dataset.key])===b.dataset.val));
+  for(const c of [...PLAY,...SUB])document.querySelectorAll(`[data-ctl="${c.key}"]`).forEach(el=>{
+    el.classList.toggle("dim",!!(c.dim&&c.dim()));
+    const dis=!!(c.dis&&c.dis());el.querySelectorAll("button").forEach(b=>b.disabled=dis);el.classList.toggle("dim",el.classList.contains("dim")||dis)});
+  for(const c of CARDS)document.querySelectorAll(`button[data-toggle][data-key="${c.key}"]`).forEach(b=>{
+    const blocked=c.needs&&!settings[c.needs];const on=!!settings[c.key]&&!blocked;
+    b.setAttribute("aria-pressed",String(on));b.disabled=!!blocked;
+    b.querySelector(".state").textContent=blocked?"必殺技と一緒に使えます":on?"追加中":"追加する"});
+  document.querySelectorAll("input[data-check]").forEach(i=>i.checked=!!settings[i.dataset.key]);
+  const on=CARDS.filter(c=>settings[c.key]&&!(c.needs&&!settings[c.needs])).map(c=>RULE_NAMES[c.key]);
+  $("ruleSummary").textContent=`${settings.size}×${settings.size}・`+(on.length?`追加ルール：${on.join("、")}`:"追加ルールなし（ふつうのリバーシ）");
+}
+function setSetting(key,val){
+  settings[key]=typeof settings[key]==="number"?+val:typeof settings[key]==="boolean"?(val===true||val==="true"):val;
+  saveSettings();syncControls();
+  if($("game").hidden){if(key==="music"&&settings.music)Music.preview();return}
+  if(RESTART.includes(key))return newGame();
+  if(key==="fx"){if(!settings.fx){$("say").setAttribute("data-empty","");$("banner").hidden=true}return}
+  if(key==="war"){renderWar();if(settings.war)recordWar();return}
+  if(key==="music"){Music.sync();return}
+  render();armTimer();
+}
+function showGame(){$("home").hidden=true;$("game").hidden=false}
+function showHome(){
+  clearTimeout(cpuTimer);stopTimer();busy=false;target=null;Music.stop();
+  $("game").hidden=true;$("home").hidden=false;$("status").textContent="";$("sub").textContent="追加ルールを選んで対局へ";
+  window.scrollTo({top:0});
+}
+$("startBtn").addEventListener("click",()=>{showGame();newGame();window.scrollTo({top:0})});
+$("homeBtn").addEventListener("click",showHome);
+$("musicBtn").addEventListener("click",()=>setSetting("music",!settings.music));
+$("newBtn").addEventListener("click",newGame);
+$("undoBtn").addEventListener("click",undo);
+if(window.matchMedia("(max-width:860px)").matches){$("setPlay").open=false;$("setRule").open=false}
+
+function start(data){
+  buildControls();syncControls();
+  if(data&&data.S&&data.S.N&&data.view==="game"){showGame();S=data.S;history=data.history||[];N=S.N;WT=weights(N);render();armTimer();scheduleCpu()}
+  else{S=initial();history=[];render();showHome()}
+  renderWar();initWar();
+}
+window.claude?.hot?.snapshot?.(()=>({S,history,view:$("game").hidden?"home":"game"}));
+window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
+})();
+</script>
+
+</body>
+</html>
